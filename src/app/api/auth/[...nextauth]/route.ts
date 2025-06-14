@@ -15,10 +15,10 @@ export const authOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
 
-  // Tell NextAuth to use our custom sign-in page
-  pages: {
-    signIn: '/auth/signin',
-  }
+  // // Tell NextAuth to use our custom sign-in page
+  // pages: {
+  //   signIn: '/auth/signin',
+  // }
 }
 
 const handler = NextAuth(authOptions);
