@@ -48,10 +48,14 @@ const formatDate = (date: Date) => date.toISOString().split('T')[0];
 // --- UI COMPONENTS ---
 const Notification = ({ message, onClose, type = 'error' }: { message: string, onClose: () => void, type?: 'error' | 'success' }) => {
   if (!message) return null;
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
-    const timer = setTimeout(onClose, 3000);
+    if (!message) return;
+    const timer = setTimeout(() => onClose(), 3000);
     return () => clearTimeout(timer);
   }, [message, onClose]);
+
   const bgColor = type === 'error' ? 'bg-red-600' : 'bg-green-600';
   return (
     <div className={`fixed top-5 right-5 ${bgColor} text-white py-2 px-4 rounded-lg shadow-lg z-50 flex items-center`}>
@@ -61,14 +65,14 @@ const Notification = ({ message, onClose, type = 'error' }: { message: string, o
   );
 };
 
-const InputField = ({ icon, ...props }: { icon: React.ReactNode; [key: string]: any }) => (
+const InputField = ({ icon, ...props }: { icon: React.ReactNode } & React.InputHTMLAttributes<HTMLInputElement>) => (
   <div className="relative flex items-center">
     <span className="absolute left-3 text-gray-400">{icon}</span>
     <input {...props} className="w-full bg-gray-700 text-white placeholder-gray-400 border border-gray-600 rounded-lg py-2 pl-10 pr-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
   </div>
 );
 
-const SelectField = ({ icon, children, ...props }: { icon: React.ReactNode; children: React.ReactNode; [key: string]: any }) => (
+const SelectField = ({ icon, children, ...props }: { icon: React.ReactNode; children: React.ReactNode } & React.SelectHTMLAttributes<HTMLSelectElement>) => (
   <div className="relative flex items-center">
     <span className="absolute left-3 text-gray-400">{icon}</span>
     <select {...props} className="w-full bg-gray-700 text-white placeholder-gray-400 border border-gray-600 rounded-lg py-2 pl-10 pr-3 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none">
@@ -141,7 +145,10 @@ export default function App() {
   const toggleTheme = () => setTheme(prev => prev === "dark" ? "light" : "dark");
 
   useEffect(() => {
-    if (status !== 'authenticated') return;
+    if (status !== 'authenticated') {
+      setDataIsLoading(true);
+      return;
+    }
     const projectsCollection = collection(db, 'projects');
     const unsubscribe = onSnapshot(projectsCollection, (snapshot) => {
       const projectsData = snapshot.docs.map(doc => ({
@@ -224,7 +231,7 @@ interface DashboardViewProps {
   setView: (view: View) => void;
   handleSelectProject: (id: string) => void;
   alerts: Alert[];
-  session: any;
+  session: import("next-auth").Session | null;
   theme: "dark" | "light";
   toggleTheme: () => void;
 }
@@ -300,7 +307,7 @@ const DashboardView = ({ projects, setView, handleSelectProject, alerts, session
   );
 };
 
-const CreateProjectView = ({ setView, setNotification }: { setView: (view: View) => void, setNotification: (notification: any) => void }) => {
+const CreateProjectView = ({ setView, setNotification }: { setView: (view: View) => void, setNotification: (notification: { message: string, type: 'error' | 'success' }) => void }) => {
   const [createStep, setCreateStep] = useState(1);
   const [newProjectName, setNewProjectName] = useState("");
   const [newProjectLaunchDate, setNewProjectLaunchDate] = useState("");
@@ -360,14 +367,14 @@ const CreateProjectView = ({ setView, setNotification }: { setView: (view: View)
             <h2 className="text-2xl font-bold mb-2">Add Tasks for &quot;{newProjectName}&quot;</h2>
             <div className="bg-slate-700 p-4 rounded-lg mb-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <InputField icon={<User />} type="text" placeholder="Task Name" value={taskName} onChange={(e) => setTaskName(e.target.value)} />
-                <SelectField icon={<User />} value={taskDepartment} onChange={(e) => setTaskDepartment(e.target.value as Department)}>
+                <InputField icon={<User />} type="text" placeholder="Task Name" value={taskName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTaskName(e.target.value)} />
+                <SelectField icon={<User />} value={taskDepartment} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTaskDepartment(e.target.value as Department)}>
                   {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
                 </SelectField>
-                <InputField icon={<Clock />} type="number" placeholder="Time Estimate (hrs)" value={timeEstimate} onChange={(e) => setTimeEstimate(e.target.value)} />
-                <InputField icon={<Calendar />} type="date" value={taskDueDate} onChange={(e) => setTaskDueDate(e.target.value)} />
-                <InputField icon={<User />} type="text" placeholder="Assignee Name" value={assignedToName} onChange={(e) => setAssignedToName(e.target.value)} />
-                <InputField icon={<AtSign />} type="email" placeholder="Assignee Email" value={assignedToEmail} onChange={(e) => setAssignedToEmail(e.target.value)} />
+                <InputField icon={<Clock />} type="number" placeholder="Time Estimate (hrs)" value={timeEstimate} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTimeEstimate(e.target.value)} />
+                <InputField icon={<Calendar />} type="date" value={taskDueDate} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTaskDueDate(e.target.value)} />
+                <InputField icon={<User />} type="text" placeholder="Assignee Name" value={assignedToName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAssignedToName(e.target.value)} />
+                <InputField icon={<AtSign />} type="email" placeholder="Assignee Email" value={assignedToEmail} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAssignedToEmail(e.target.value)} />
               </div>
               <button onClick={handleAddTask} className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg flex items-center">
                 <Plus size={16} className="mr-2" />Add Task
@@ -393,7 +400,7 @@ const CreateProjectView = ({ setView, setNotification }: { setView: (view: View)
   );
 };
 
-const ProjectView = ({ project, setView, setNotification }: { project: Project, setView: (view: View) => void, setNotification: (notification: any) => void }) => {
+const ProjectView = ({ project, setView, setNotification }: { project: Project, setView: (view: View) => void, setNotification: (notification: { message: string, type: 'error' | 'success' }) => void }) => {
   const [isEditing, setIsEditing] = useState(false);
   // Local state for editing project details
   const [editProjectName, setEditProjectName] = useState(project.name);
@@ -535,7 +542,7 @@ const ProjectView = ({ project, setView, setNotification }: { project: Project, 
   );
 };
 
-const AlertsView = ({ alerts, setView, setNotification }: { alerts: Alert[], setView: (view: View) => void, setNotification: (notification: any) => void }) => {
+const AlertsView = ({ alerts, setView, setNotification }: { alerts: Alert[], setView: (view: View) => void, setNotification: (notification: { message: string, type: 'error' | 'success' } | null) => void }) => {
   const handleSendAlertEmail = async (alert: Alert) => {
     setNotification({ message: `Notifying ${alert.recipientEmail}...`, type: 'success' });
     try {

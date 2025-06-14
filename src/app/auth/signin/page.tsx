@@ -1,16 +1,15 @@
 "use client";
 
-// In a real Next.js project, you would use:
-// import { signIn } from 'next-auth/react';
 import React from 'react';
-import { ArrowRight, BarChart, CheckCircle, GanttChartSquare, LayoutDashboard, Layers, LifeBuoy, LogIn, Users, AlertTriangle } from 'lucide-react';
-
+import { ArrowRight, CheckCircle, GanttChartSquare, LayoutDashboard, Layers,LogIn,AlertTriangle } from 'lucide-react';
+import Image from 'next/image';
+import {signIn } from 'next-auth/react';
 // This is a mock signIn function to resolve the build error in this environment.
 // In your actual Next.js project, the real import will work correctly.
-const signIn = (provider: string, options: { callbackUrl: string }) => {
-  console.log(`Simulating sign-in with ${provider} and callback to ${options.callbackUrl}`);
-  alert(`In a real app, you would now be redirected to Google to sign in.`);
-};
+// const signIn = (provider: string, options: { callbackUrl: string }) => {
+//   console.log(`Simulating sign-in with ${provider} and callback to ${options.callbackUrl}`);
+//   alert(`In a real app, you would now be redirected to Google to sign in.`);
+// };
 
 // This is the dedicated, professional landing page for your application.
 export default function LandingPage() {
@@ -77,7 +76,7 @@ export default function LandingPage() {
                   <LayoutDashboard className="h-6 w-6" />
                 </div>
                 <h3 className="mt-5 text-xl font-semibold text-white">Visual Kanban Boards</h3>
-                <p className="mt-2 text-base text-gray-400">Track tasks from "To Do" to "Done" with intuitive drag-and-drop boards for every department.</p>
+                <p className="mt-2 text-base text-gray-400">Track tasks from &quot;To Do&quot; to &quot;Done&quot; with intuitive drag-and-drop boards for every department.</p>
               </div>
               <div className="flex flex-col items-center text-center p-6 bg-slate-900 rounded-lg">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-500/20 text-blue-400">
@@ -115,19 +114,19 @@ export default function LandingPage() {
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="h-6 w-6 flex-shrink-0 text-green-400" />
-                    <p className="ml-3 text-gray-300">Get a bird's-eye view of your entire launch schedule.</p>
+                    <p className="ml-3 text-gray-300">Get a bird&#39;s-eye view of your entire launch schedule.</p>
                   </li>
                 </ul>
               </div>
-              <div className="rounded-lg bg-slate-800 p-4 shadow-2xl">
-                <img
+                <Image
                   src="https://placehold.co/800x600/1e293b/94a3b8?text=Gantt+Chart+View"
                   alt="Gantt Chart illustration"
                   className="rounded-md w-full h-auto"
+                  width={800}
+                  height={600}
                 />
               </div>
             </div>
-          </div>
         </section>
 
         {/* Testimonials Section */}
@@ -136,21 +135,21 @@ export default function LandingPage() {
             <h2 className="text-center text-3xl font-bold leading-8 text-white">Trusted by high-performance teams</h2>
             <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
               <blockquote className="bg-slate-900 p-6 rounded-lg">
-                <p className="text-lg text-gray-300">"LaunchPad completely transformed how we manage our seasonal collections. The ability to see everything in one place is a game-changer."</p>
+                <p className="text-lg text-gray-300">&quot;LaunchPad completely transformed how we manage our seasonal collections. The ability to see everything in one place is a game-changer.&quot;</p>
                 <footer className="mt-4">
                   <p className="font-semibold text-white">Priya K.</p>
                   <p className="text-sm text-gray-400">Head of Design</p>
                 </footer>
               </blockquote>
               <blockquote className="bg-slate-900 p-6 rounded-lg">
-                <p className="text-lg text-gray-300">"Bye-bye, spreadsheets! We've eliminated hours of manual status updates. The automated alerts keep everyone accountable."</p>
+                <p className="text-lg text-gray-300">&quot;Bye-bye, spreadsheets! We&apos;ve eliminated hours of manual status updates. The automated alerts keep everyone accountable.&quot;</p>
                 <footer className="mt-4">
                   <p className="font-semibold text-white">Amit S.</p>
                   <p className="text-sm text-gray-400">Finance Lead</p>
                 </footer>
               </blockquote>
               <blockquote className="bg-slate-900 p-6 rounded-lg">
-                <p className="text-lg text-gray-300">"As a supply chain manager, knowing exactly when marketing needs product for a shoot is critical. LaunchPad connects those dots for us."</p>
+                <p className="text-lg text-gray-300">&quot;As a supply chain manager, knowing exactly when marketing needs product for a shoot is critical. LaunchPad connects those dots for us.&quot;</p>
                 <footer className="mt-4">
                   <p className="font-semibold text-white">Sunita M.</p>
                   <p className="text-sm text-gray-400">Supply Chain Director</p>
