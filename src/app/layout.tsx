@@ -18,8 +18,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* This wraps your entire application with the session provider,
-            making authentication state available everywhere. */}
         <Providers>{children}</Providers>
       </body>
     </html>
