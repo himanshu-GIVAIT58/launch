@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
-    dangerouslyAllowSVG: true, // enable SVG support
+    dangerouslyAllowSVG: true, 
   },
 };
 
