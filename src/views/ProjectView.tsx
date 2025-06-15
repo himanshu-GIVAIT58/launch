@@ -148,7 +148,7 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, setView, setNotifica
               Edit Project
             </button>
           </div>
-          <div className="flex flex-col lg:flex-row gap-6">
+            <div className="flex flex-col lg:flex-row gap-6">
             <KanbanColumn status="To Do" tasks={project.tasks.filter((t) => t.status === "To Do")} onDrop={onDrop} onDragOver={(e) => e.preventDefault()} />
             <KanbanColumn status="In Progress" tasks={project.tasks.filter((t) => t.status === "In Progress")} onDrop={onDrop} onDragOver={(e) => e.preventDefault()} />
             <KanbanColumn status="Done" tasks={project.tasks.filter((t) => t.status === "Done")} onDrop={onDrop} onDragOver={(e) => e.preventDefault()} />
